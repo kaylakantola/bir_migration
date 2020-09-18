@@ -1,0 +1,16 @@
+{
+  "name": "bird_migration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kayla Kantola <kkantola@trhc.com> (https://git.carekinesis.net/KKantola)",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/storage": "^5.3.0",
+    "fs-extra": "^9.0.1",
+    "node-fetch": "^2.6.1"
+  }
+}
