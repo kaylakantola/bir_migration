@@ -6,6 +6,8 @@
 
 ![i dont understand](https://media.giphy.com/media/fXmpRvTWqIWbK/giphy.gif)
 
+## Ha ha, ok, but really
+
 The purpose of this exercise is ultimately to create a proof of concept demonstrating how to capture meaningful metrics via GCP Logging.
 
 If I post to an API, and that post kicks off a series of events involving various pubsub messages and streaming pipelines, I want to know how much time it takes the object to travel through each step.
