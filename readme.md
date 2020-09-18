@@ -2,6 +2,20 @@
 
 ![chickadee](./images/intense.png)
 
+## Why are you doing this, Kayla 
+
+![i dont understand](https://media.giphy.com/media/fXmpRvTWqIWbK/giphy.gif)
+
+The purpose of this exercise is ultimately to create a proof of concept demonstrating how to capture meaningful metrics via GCP Logging.
+
+If I post to an API, and that post kicks off a series of events involving various pubsub messages and streaming pipelines, I want to know how much time it takes the object to travel through each step.
+
+I want to track the status of the data (bird) as it travels through my code (migrates from the northeast to the southeast). 
+
+I want to be able to get an idea of how long it takes on average, so that I can reliably report out the level of service I am providing (I guess that makes me ajetstream in this metaphor? I'm losing the thread)
+
+tl;dr - I want to demonstrate how to provide meaningful logs for a multifaceted streaming system. 
+
 ## Summary of events
 
 1. Someone posts a JSON object representing a bird to an api endpoint: `{"name": "chickadee"}`
