@@ -2,7 +2,45 @@
 
 ![chickadee](./images/intense.png)
 
-An example repo showing how to:
+## Summary of events
+
+1. Someone posts a JSON object representing a bird to an api endpoint: `{"name": "chickadee"}`
+2. The endpoint:
+    - Adds a `start_time` to the bird object `{"name": "chickadee", "start_time": <utc-string>}`
+    - Publishes the bird object to GCP PubSub Topic (`take_flight`)
+3. A GCP cloud function listening to the topic:
+    - takes in the bird object
+    - fetches an image of the bird from an external api (unsplash)
+    - creates a new bird object `{"name": "chickadee", "image": "https://www.coolbirds.com/some-chickadee-image.png"}`
+    - publishes the new bird object to a different pubsub topic  (`start_migration`)
+4. An Apache Beam streaming pipeline running on GCP dataflow, which represents the bird travelling through the North East, called the `NorthEastPipeline`:
+    - uses `take_flight` pubsub topic as a data source
+    - for each bird that comes through the pipeline:
+        - add a `ne_arrival` timestamp to the bird object
+        - use an external API to grab the air quality of a random city in the North East region 
+        - create an array on each bird object called `air_quality` and append this air quality observation to the bird, `{...birdObject, "ne_arrival": <utc-string>, air_quality: [{...observation object for Boston, MA}]}`
+        - Publish the updated bird object to a new Pubsub topic, `depart_ne`
+5. An Apache Beam streaming pipeline running on GCP dataflow, which represents the bird travelling through the Mid Altantic, called the `MidAtlanticPipeline`:
+    - uses `depart_ne` pubsub topic as a data source
+    - for each bird that comes through the pipeline, 
+        - use an external API to grab the air quality of a random city in the Mid Altantic 
+        - add a `ma_arrival` timestamp to the bird object
+        - append this air quality observation to the bird's `air_quality` array, `{...birdObject, "ma_arrival": <utc-string>, air_quality: [{...observation object for Boston, MA}, {...observation object for Richmond, VA}]}`
+        - Publish the updated bird object to a new Pubsub topic, `depart_ma`    
+6. An Apache Beam streaming pipeline running on GCP dataflow, which represents the bird travelling through the South East, called the `SouthEastPipeline`:
+    - uses `depart_ma` pubsub topic as a data source
+    - for each bird that comes through the pipeline, 
+        - use an external API to grab the air quality of a random city in the South East
+        - add a `se_arrival` timestamp to the bird object
+        - append this air quality observation to the bird's `air_quality` array, `{...birdObject, "se_arrival": <utc-string>, air_quality: [{...observation object for Boston, MA}, {...observation object for Richmond, VA}, {...observation object for Charleston, SC}]}`
+        - Write the completed bird object to a GCS bucket (`arrival_bucket`)    
+7. The GCS bucket emits notifications to a pubsub topic (`arrival`) when a new object is added to the bucket
+8. A React app subscribes to the `arrival` pubsub topic, and displays info about each bird as it arrives.
+  
+
+
+## Summary of Dev Tasks
+
 - Write terraform for GCP resources, specifically:
     - Pubsub 
     - Storage 
@@ -26,4 +64,6 @@ WIP:
     - Subscribes to a pubsub topic
     - Displays messages received from the pubsub topic
     - Can access the express app from the above step to start the chain of events
-    
+- Incorporate GCP logging throughout to:
+    - Keep track of the status of each bird object as it travels through each pipeline/pubsub/bucket
+    - Collect analytics around how long it takes each bird to get from start to finish (the goal being that we can write SLO's around these numbers) 
