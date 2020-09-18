@@ -1,4 +1,4 @@
-.env.yaml
-.idea
-node_modules
 terraform/.terraform
+terraform/cloud_functions/.env.yaml
+terraform/cloud_functions/.idea
+terraform/cloud_functions/node_modules

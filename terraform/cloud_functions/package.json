@@ -9,8 +9,7 @@
   "author": "Kayla Kantola <kkantola@trhc.com> (https://git.carekinesis.net/KKantola)",
   "license": "MIT",
   "dependencies": {
-    "@google-cloud/storage": "^5.3.0",
-    "fs-extra": "^9.0.1",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "unsplash-js": "^6.3.0"
   }
 }
