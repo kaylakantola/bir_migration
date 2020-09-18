@@ -6,7 +6,7 @@
 
 1. Someone posts a JSON object representing a bird to an api endpoint: `{"name": "chickadee"}`
 2. The endpoint:
-    - Adds a `start_time` to the bird object `{"name": "chickadee", "start_time": <utc-string>}`
+    - Adds a `start_time` & `uuid` to the bird object `{"name": "chickadee", "start_time": <utc-string>, "uuid": <some-random-string>}`
     - Publishes the bird object to GCP PubSub Topic (`take_flight`)
 3. A GCP cloud function listening to the topic:
     - takes in the bird object
