@@ -14,7 +14,7 @@ If I post to an API, and that post kicks off a series of events involving variou
 
 I want to track the status of the data (bird) as it travels through my code (migrates from the northeast to the southeast). 
 
-I want to be able to get an idea of how long it takes on average, so that I can reliably report out the level of service I am providing (I guess that makes me ajetstream in this metaphor? I'm losing the thread)
+I want to be able to get an idea of how long it takes on average, so that I can reliably report out the level of service I am providing (I guess that makes me a jetstream in this metaphor? I'm losing the thread)
 
 tl;dr - I want to demonstrate how to provide meaningful logs for a multifaceted streaming system. 
 
