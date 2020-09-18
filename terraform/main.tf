@@ -58,6 +58,7 @@ resource google_storage_bucket arrival_bucket {
 }
 
 data google_storage_project_service_account gcs_account {
+  project  = var.gcp_project_id
 }
 
 resource google_pubsub_topic_iam_binding binding {
@@ -77,7 +78,8 @@ resource google_storage_notification arrival_notification {
 ## CLOUD FUNCTIONS
 
 resource google_storage_bucket cloud_fn_bucket {
-  name = "cloud-fn-bucket"
+  name = "bird_migration_cloud_fns"
+  project  = var.gcp_project_id
 }
 
 resource google_storage_bucket_object archive {
@@ -88,21 +90,11 @@ resource google_storage_bucket_object archive {
 
 resource google_cloudfunctions_function liftoff {
   name        = "liftoff"
+  project  = var.gcp_project_id
   description = "Listens to the take_flight pubsub, posts to the start_migration pubsub"
   runtime     = "nodejs10"
-
-  source_archive_bucket = google_storage_bucket.cloud_fn_bucket.name
-  source_archive_object = google_storage_bucket_object.archive.name
-  trigger_http          = true
-  entry_point           = "liftoff"
-}
-
-resource google_cloudfunctions_function_iam_member invoker {
-  project        = google_cloudfunctions_function.liftoff.project
-  region         = google_cloudfunctions_function.liftoff.region
-  cloud_function = google_cloudfunctions_function.liftoff.name
-
-  event_trigger = {
+  region = var.region
+  event_trigger {
     event_type = "google.pubsub.topic.publish"
     resource = module.take_flight_pubsub.topic_id
   }
@@ -111,6 +103,18 @@ resource google_cloudfunctions_function_iam_member invoker {
     UNSPLASH_ACCESS_KEY = "QjEVYBA0V2FpmylQX3c-f2RIgo7DRo6Z4WLPmgRvcrY"
     PUBSUB_TOPIC = module.start_migration_pubsub.topic_id
   }
+
+  source_archive_bucket = google_storage_bucket.cloud_fn_bucket.name
+  source_archive_object = google_storage_bucket_object.archive.name
+  entry_point           = "liftoff"
+}
+
+resource google_cloudfunctions_function_iam_member invoker {
+  project        = google_cloudfunctions_function.liftoff.project
+  region         = google_cloudfunctions_function.liftoff.region
+  cloud_function = google_cloudfunctions_function.liftoff.name
+
+
 
   role   = "roles/cloudfunctions.invoker"
   member = "allUsers"
