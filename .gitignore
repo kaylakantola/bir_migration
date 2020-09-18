@@ -3,3 +3,4 @@ terraform/cloud_functions/.env.yaml
 terraform/cloud_functions/.idea
 terraform/cloud_functions/node_modules
 .idea
+.DS_Store
