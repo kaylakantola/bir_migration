@@ -2,5 +2,8 @@ terraform/.terraform
 terraform/cloud_functions/.env.yaml
 terraform/cloud_functions/.idea
 terraform/cloud_functions/node_modules
+api/node_modules
+api/service-account.json
+api/.env
 .idea
 .DS_Store

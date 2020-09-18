@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "zip": "rm -rf output/index.zip && node zip.js"
   },
   "author": "Kayla Kantola <kkantola@trhc.com> (https://git.carekinesis.net/KKantola)",
   "license": "MIT",
   "dependencies": {
+    "@google-cloud/pubsub": "^2.5.0",
     "node-fetch": "^2.6.1",
+    "node-zip": "^1.1.1",
     "unsplash-js": "^6.3.0"
   }
 }

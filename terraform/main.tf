@@ -6,7 +6,9 @@ data "google_project" "project" {
   project_id = var.gcp_project_id
 }
 
-
+locals {
+  function_name = "index"
+}
 ## PUBSUB
 
 module take_flight_pubsub {
@@ -82,10 +84,16 @@ resource google_storage_bucket cloud_fn_bucket {
   project  = var.gcp_project_id
 }
 
+data archive_file function_dist {
+  type        = "zip"
+  source_dir  = "./cloud_functions"
+  output_path = "./cloud_functions/dist/${local.function_name}.zip"
+}
+
 resource google_storage_bucket_object archive {
-  name   = "index.zip"
+  name   = "${local.function_name}.${data.archive_file.function_dist.output_md5}.zip"
   bucket = google_storage_bucket.cloud_fn_bucket.name
-  source = "./cloud_functions/output/index.zip"
+  source = data.archive_file.function_dist.output_path
 }
 
 resource google_cloudfunctions_function liftoff {
@@ -101,7 +109,8 @@ resource google_cloudfunctions_function liftoff {
 
   environment_variables = {
     UNSPLASH_ACCESS_KEY = "QjEVYBA0V2FpmylQX3c-f2RIgo7DRo6Z4WLPmgRvcrY"
-    PUBSUB_TOPIC = module.start_migration_pubsub.topic_id
+    PUBSUB_TOPIC = "start_migration"
+    PROJECT_ID = var.gcp_project_id
   }
 
   source_archive_bucket = google_storage_bucket.cloud_fn_bucket.name
@@ -113,8 +122,6 @@ resource google_cloudfunctions_function_iam_member invoker {
   project        = google_cloudfunctions_function.liftoff.project
   region         = google_cloudfunctions_function.liftoff.region
   cloud_function = google_cloudfunctions_function.liftoff.name
-
-
 
   role   = "roles/cloudfunctions.invoker"
   member = "allUsers"
