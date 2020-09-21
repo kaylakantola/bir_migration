@@ -5,5 +5,8 @@ terraform/cloud_functions/node_modules
 api/node_modules
 api/service-account.json
 api/.env
+pipeline/north_east/service-account.json
+pipeline/mid_atlantic/service-account.json
+pipeline/south_east/service-account.json
 .idea
 .DS_Store

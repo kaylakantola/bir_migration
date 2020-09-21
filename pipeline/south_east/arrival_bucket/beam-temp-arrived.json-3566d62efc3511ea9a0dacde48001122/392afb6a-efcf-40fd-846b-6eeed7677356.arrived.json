@@ -1,0 +1,107 @@
+{
+  "name": "duck",
+  "uuid": "4ece36cf-7ae0-41ae-9121-87901f8f41f4",
+  "start_time": 1600711610074,
+  "image": "https://images.unsplash.com/photo-1565538917973-4079f5b64708?ixlib=rb-1.2.1&auto=format&fit=crop&w=948&q=80",
+  "air_quality": [
+    {
+      "status": "success",
+      "data": {
+        "city": "Boston",
+        "state": "Massachusetts",
+        "country": "USA",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            -71.0542,
+            42.3631
+          ]
+        },
+        "current": {
+          "weather": {
+            "ts": "2020-09-21T17:00:00.000Z",
+            "tp": 16,
+            "pr": 1036,
+            "hu": 44,
+            "ws": 6.2,
+            "wd": 60,
+            "ic": "02d"
+          },
+          "pollution": {
+            "ts": "2020-09-21T17:00:00.000Z",
+            "aqius": 12,
+            "mainus": "p2",
+            "aqicn": 4,
+            "maincn": "p2"
+          }
+        }
+      }
+    },
+    {
+      "status": "success",
+      "data": {
+        "city": "Richmond",
+        "state": "Virginia",
+        "country": "USA",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            -77.400299,
+            37.5583
+          ]
+        },
+        "current": {
+          "weather": {
+            "ts": "2020-09-21T17:00:00.000Z",
+            "tp": 18,
+            "pr": 1033,
+            "hu": 45,
+            "ws": 4.6,
+            "wd": 70,
+            "ic": "04d"
+          },
+          "pollution": {
+            "ts": "2020-09-21T17:00:00.000Z",
+            "aqius": 9,
+            "mainus": "p2",
+            "aqicn": 3,
+            "maincn": "p2"
+          }
+        }
+      }
+    },
+    {
+      "status": "success",
+      "data": {
+        "city": "Atlanta",
+        "state": "Georgia",
+        "country": "USA",
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            -84.3578,
+            33.7206
+          ]
+        },
+        "current": {
+          "weather": {
+            "ts": "2020-09-21T17:00:00.000Z",
+            "tp": 18,
+            "pr": 1029,
+            "hu": 48,
+            "ws": 6.7,
+            "wd": 90,
+            "ic": "03d"
+          },
+          "pollution": {
+            "ts": "2020-09-21T16:00:00.000Z",
+            "aqius": 18,
+            "mainus": "p2",
+            "aqicn": 15,
+            "maincn": "n2"
+          }
+        }
+      }
+    }
+  ]
+}
