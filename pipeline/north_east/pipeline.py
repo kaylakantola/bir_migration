@@ -1,8 +1,8 @@
 from __future__ import absolute_import
-
+import time
 import argparse
-import logging
 import json
+from google.cloud import logging
 
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
@@ -30,11 +30,18 @@ class GetAirQuality(beam.DoFn):
         air_q = data['air_quality']
         air_q.append(aq_dict)
         data['air_quality'] = air_q
-        uuid = data['uuid']
+        currentTime = time.time()
+        data['ne_arrival'] = currentTime
         enriched_bird_str = json.dumps(data).encode('utf-8')
         updated_element = element
         updated_element.data = enriched_bird_str
-        print(f"NORTHEAST, v.{version['__version__']}, uuid: {uuid}")
+
+
+        client = logging.Client()
+        log_name = data['uuid']
+        logger = client.logger(log_name)
+
+        logger.log_text(f"NORTHEAST, v.{version['__version__']}, uuid: {data['uuid']}, Elapsed time since last step: {currentTime - data['start_time']}")
         yield updated_element
 
 
@@ -69,5 +76,5 @@ def run(argv=None, save_main_session=True):
 
 
 if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.INFO)
+    print('go!')
     run()

@@ -1,14 +1,14 @@
 from __future__ import absolute_import
 
 import argparse
-import logging
+from google.cloud import logging
 import json
 
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import SetupOptions
 import requests
-
+import time
 from settings import PROJECT_ID, REGION, BUCKET_NAME, JOB_NAME, RUNNER, INCOMING_PUBSUB_SUBSCRIPTION, OUTGOING_PUBSUB_TOPIC, AQ_API_KEY
 
 
@@ -17,7 +17,6 @@ aq_baseurl = 'http://api.airvisual.com/v2/city'
 version = {}
 with open("./version.py") as fp:
     exec(fp.read(), version)
-
 
 class GetAirQuality(beam.DoFn):
     def process(self, element):
@@ -31,11 +30,17 @@ class GetAirQuality(beam.DoFn):
         air_q = data['air_quality']
         air_q.append(aq_dict)
         data['air_quality'] = air_q
+        currentTime = time.time()
+        data['ma_arrival'] = currentTime
         uuid = data['uuid']
         enriched_bird_str = json.dumps(data).encode('utf-8')
         updated_element = element
         updated_element.data = enriched_bird_str
-        print(f"MID ATLANTIC, v.{version['__version__']}, uuid: {uuid}")
+
+        client = logging.Client()
+        log_name = data['uuid']
+        logger = client.logger(log_name)
+        logger.log_text(f"MID ATLANTIC, v.{version['__version__']}, uuid: {uuid}, Elapsed time since last step: {currentTime - data['ne_arrival']}")
 
         yield updated_element
 
@@ -70,5 +75,4 @@ def run(argv=None, save_main_session=True):
 
 
 if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.INFO)
     run()
