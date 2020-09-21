@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "zip": "rm -rf output/index.zip && node zip.js"
-  },
   "author": "Kayla Kantola <kkantola@trhc.com> (https://git.carekinesis.net/KKantola)",
   "license": "MIT",
   "dependencies": {

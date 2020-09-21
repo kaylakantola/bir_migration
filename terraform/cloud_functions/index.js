@@ -32,7 +32,7 @@ exports.liftoff = async (message, context) => {
   console.log("Liftoff! Bird: ", bird.name, bird.uuid)
   try {
     const image = await getBirdImage(bird.name)
-    const enriched_bird = {...bird, image}
+    const enriched_bird = {...bird, image, air_quality: []}
     const messageId = await publish(enriched_bird)
     return console.log("Onward! Bird: ", {messageId, enriched_bird})
   } catch (err) {

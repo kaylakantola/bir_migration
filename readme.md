@@ -70,12 +70,13 @@ tl;dr - I want to demonstrate how to provide meaningful logs for a multifaceted 
     - create an endpoint that takes in a JSON object representing a bird
     - Give the JSON object a timestamp and a unique ID
     - Publish that JSON object to a pubsub topic    
-    
-WIP: 
 - Writing Apache Beam pipelines to:
     - Stream unbounded data sets
     - Read from pub subs
     - Write to pub subs, or a GCS bucket
+    
+    
+WIP:     
 - Write a small react app that:
     - Subscribes to a pubsub topic
     - Displays messages received from the pubsub topic

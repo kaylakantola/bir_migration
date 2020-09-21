@@ -13,6 +13,11 @@ from settings import PROJECT_ID, REGION, BUCKET_NAME, JOB_NAME, RUNNER, INCOMING
 
 aq_baseurl = 'http://api.airvisual.com/v2/city'
 
+version = {}
+with open("./version.py") as fp:
+    exec(fp.read(), version)
+
+
 class GetAirQuality(beam.DoFn):
     def process(self, element):
         decoded_data = element.data.decode("utf-8")
@@ -20,14 +25,16 @@ class GetAirQuality(beam.DoFn):
 
         api_url = f"{aq_baseurl}?city=Boston&state=Massachusetts&country=USA&key={AQ_API_KEY}"
         r = requests.get(api_url)
-        aq_dict = r.json()
-        aq_list = {'air_quality':[aq_dict]}
 
-        enriched_bird = {**data, **aq_list}
-        enriched_bird_str = json.dumps(enriched_bird).encode('utf-8')
+        aq_dict = r.json()
+        air_q = data['air_quality']
+        air_q.append(aq_dict)
+        data['air_quality'] = air_q
+        uuid = data['uuid']
+        enriched_bird_str = json.dumps(data).encode('utf-8')
         updated_element = element
         updated_element.data = enriched_bird_str
-        print(f"NORTHEAST:", enriched_bird_str)
+        print(f"NORTHEAST, v.{version['__version__']}, uuid: {uuid}")
         yield updated_element
 
 
@@ -42,11 +49,13 @@ def run(argv=None, save_main_session=True):
         f'--staging_location=gs://{BUCKET_NAME}/staging',
         f'--temp_location=gs://{BUCKET_NAME}/temp',
         f'--job_name={JOB_NAME}',
+        '--setup_file="./setup.py"',
         '--streaming'
     ])
 
     pipeline_options = PipelineOptions(pipeline_args)
     pipeline_options.view_as(SetupOptions).save_main_session = save_main_session
+
 
     with beam.Pipeline(options=pipeline_options) as p:
 

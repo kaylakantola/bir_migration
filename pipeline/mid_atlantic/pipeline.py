@@ -11,7 +11,13 @@ import requests
 
 from settings import PROJECT_ID, REGION, BUCKET_NAME, JOB_NAME, RUNNER, INCOMING_PUBSUB_SUBSCRIPTION, OUTGOING_PUBSUB_TOPIC, AQ_API_KEY
 
+
 aq_baseurl = 'http://api.airvisual.com/v2/city'
+
+version = {}
+with open("./version.py") as fp:
+    exec(fp.read(), version)
+
 
 class GetAirQuality(beam.DoFn):
     def process(self, element):
@@ -25,11 +31,12 @@ class GetAirQuality(beam.DoFn):
         air_q = data['air_quality']
         air_q.append(aq_dict)
         data['air_quality'] = air_q
-
+        uuid = data['uuid']
         enriched_bird_str = json.dumps(data).encode('utf-8')
         updated_element = element
         updated_element.data = enriched_bird_str
-        print(f"MID ATLANTIC:", enriched_bird_str)
+        print(f"MID ATLANTIC, v.{version['__version__']}, uuid: {uuid}")
+
         yield updated_element
 
 
@@ -44,6 +51,7 @@ def run(argv=None, save_main_session=True):
         f'--staging_location=gs://{BUCKET_NAME}/staging',
         f'--temp_location=gs://{BUCKET_NAME}/temp',
         f'--job_name={JOB_NAME}',
+        '--setup_file="./setup.py"',
         '--streaming'
     ])
 
