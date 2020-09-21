@@ -7,7 +7,7 @@ with open("./version.py") as fp:
 
 setuptools.setup(
     name="SouthEastPipeline",
-    version=version,
+    version=version['__version__'],
     install_requires=[],
     packages=setuptools.find_packages()
 )
